@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"></script>
+  <script src="../bower_components/ng-file-upload/ng-file-upload.js" type="text/javascript"
+          charset="utf-8"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+  <!--<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"-->
+          <!--charset="utf-8"></script>-->
+  <script src="../src/json-form.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../src/template.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet/less" type="text/css" href="../src/json-form.less">
+  <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="form-demo.js" type="text/javascript" charset="utf-8"></script>
+  <script src="form-config.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body ng-app="jsonFormApp">
+<div ng-controller="MainCtrl">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-offset-1 col-sm-10">
+        <div class="row">
+
+          <!--左侧表单-->
+          <div class="col-md-6">
+            <div style="position:relative">
+              <json-form
+                form-schema="mySchema"
+                ng-model="model"
+                form-valid="isValid"
+              ></json-form>
+              <div class="buttons">
+                <button class="btn btn-primary" ng-disabled="!isValid">Submit</button>
+                <button class="btn">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <!-- 左侧表单-->
+          <!--右侧数据显示-->
+
+          <!--右侧数据显示-->
+        </div>
+      </div>
+    </div>
+    <div class="try-it"> <!-- ngIf: !greeting -->
+      <button ng-if="!greeting" class="btn btn-primary ng-scope" ng-click="prompt()">Try it out</button>
+      <!-- end ngIf: !greeting --> <!-- ngIf: greeting --> </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-offset-1">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="">
+            <input type="number" class="form-control" placeholder="" uib-popover="尝试输入一个非数字值" popover-trigger="focus" popover-placement="right" popover-append-to-body="true">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
