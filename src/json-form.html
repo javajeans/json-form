@@ -40,7 +40,6 @@
 
                 uib-popover="{{ item.helpMessage }}"
                 popover-trigger="focus"
-                popover-placement="right"
                 popover-append-to-body="true"
 
                 validation-url="{{ item.validationUrl }}"
@@ -140,8 +139,7 @@
           <label for="checkbox-{{item.name}}"
           popover-trigger="mouseenter"
                  uib-popover="{{ item.helpMessage }}"
-          popover-append-to-body="true"
-          popover-placement="right">
+          popover-append-to-body="true">
           {{item.label}}
         </label>
         </div>
@@ -158,7 +156,6 @@
           popover-trigger="mouseenter"
           uib-popover="{{ item.helpMessage }}"
           popover-append-to-body="true"
-          popover-placement="right"
 
           ng-required="isRequired(item)"
           ng-disabled="isDisabled(item)"
@@ -183,8 +180,7 @@
             <label for="radio-{{key}}"
               popover-trigger="mouseenter"
                    uib-popover="{{ item.helpMessage }}"
-              popover-append-to-body="true"
-              popover-placement="right">
+              popover-append-to-body="true">
               {{value}}
             </label>
           </div><br>
