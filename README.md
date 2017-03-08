@@ -2,13 +2,6 @@
 
 AngularJS + Bootstrap forms generated from a JSON. 
 
-##Installation
-
-Install json-form from bower:
-
-```
-bower install json-form --save
-```
 
 Make sure you include **json-form**, **bootstrap.ui** and **ngFileUpload** in your angular module:
 
@@ -57,6 +50,8 @@ Here is a list of all the available options for the fields defined in the **sche
   * number
 
   * checkbox
+  
+  * checkboxs
 
   * select
 

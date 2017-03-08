@@ -1,10 +1,16 @@
-!function(e){try{e=angular.module("json-form.template")}catch(n){e=angular.module("json-form.template",[])}e.run(["$templateCache",function(e){e.put("src/json-form.html",'<!-- Form -->\n<form name="jsonForm" class="jsonForm container-fluid" novalidate>\n\n  <ng-form ng-repeat="item in schema | orderBy:\'order\'" ng-class="getClass(item)" name="{{item.name}}">\n    <div style="display: block" class="form-group row has-feedback" ng-class="{ \'is-centered\': item.type != \'textarea\' && item.type != \'radio\', \'has-success\': item.feedback && !jsonForm[item.name].$pending && jsonForm[item.name].$valid && jsonForm[item.name].$dirty }" ng-show="isVisible(item)">\n      <!-- Label -->\n      <label\n        ng-if="item.type != \'checkbox\'"\n        ng-class="{ \'text-muted\' : isDisabled(item) && !readOnly, \'col-sm-12\': item.type == \'title\', \'col-sm-4\': item.type != \'title\', \'has-options\': item.type == \'password-show\' || item.type == \'password-generate\' }"\n        >\n\n        <!-- Title -->\n        <h4 class="text-muted" ng-if="item.type == \'title\'">{{item.label}}\n          <i  class="fa fa-question-circle text-info"\n              ng-if="!!item.helpMessage"\n              popover="{{ item.helpMessage }}"\n              popover-trigger="mouseenter"\n              popover-placement="right"\n              popover-append-to-body="true">\n          </i>\n        </h4>\n\n        <!-- Field label -->\n        <span ng-if="item.type != \'title\' && item.type != \'checkbox\'" ng-class="{ \'required\' : isRequired(item) }">{{item.label}}</span>\n\n      </label>\n\n      <!-- Field input -->\n      <div class="col-sm-8" ng-if="item.type != \'title\'" ng-class="{ \'col-sm-offset-4\': item.type == \'checkbox\' }">\n\n        <!-- Text, Password and Number -->\n        <div class="row" ng-if="isInput(item)">\n          <div ng-class="{ \'col-xs-10 col-sm-9\': item.type == \'password-generate\', \'col-sm-12\': item.type != \'password-generate\' }">\n            <div class="is-relative">\n              <input\n\n                type="{{ getType(item) }}"\n                class="form-control"\n                placeholder="{{ readOnly ? \'\' : item.placeholder }}"\n\n                popover="{{ item.helpMessage }}"\n                popover-trigger="focus"\n                popover-placement="right"\n                popover-append-to-body="true"\n\n                validation-url="{{ item.validationUrl }}"\n\n                typeahead="t for t in item.typeahead | filter:$viewValue | limitTo:8"\n\n                ng-model="ngModel[item.name]"\n                ng-model-options="{ updateOn: item.updateOn, debounce: item.debounce }"\n                ng-focus="focus[item.name] = true; jsonForm[item.name].$setDirty();"\n                ng-blur="focus[item.name] = false"\n\n                ng-required="isRequired(item)"\n                minlength="{{ item.minLength }}"\n                maxlength="{{ item.maxLength }}"\n                ng-min="{{ item.min }}"\n                ng-max="{{ item.max }}"\n                ng-pattern="item.pattern"\n                ng-trim="true"\n\n                ng-pattern="item.pattern"\n                ng-disabled="isDisabled(item)"\n\n                tabindex="{{ $index + 1 }}"\n              />\n\n              <!-- Validation feedback -->\n              <span\n                ng-if="item.feedback"\n                ng-show="!jsonForm[item.name].$pending && jsonForm[item.name].$valid && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n                ><i class="fa fa-check"></i>\n              </span>\n              <span\n                ng-if="item.feedback"\n                ng-show="jsonForm[item.name].$pending && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n              ><i class="fa fa-refresh fa-spin"></i></span>\n              <span\n                ng-if="item.feedback"\n                ng-show="!jsonForm[item.name].$pending && jsonForm[item.name].$invalid && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n              ><i class="fa fa-times"></i></span>\n\n              <!-- Show Passwords -->\n              <span\n                ng-if="item.type == \'password-show\' || item.type == \'password-generate\'"\n                ng-click="togglePassword(item)"\n                class="form-control-feedback"\n                style="cursor:pointer;  pointer-events: auto;"\n                ng-class=" { \'text-muted\': !item.showPassword }"\n                ><i class="fa fa-eye" tooltip="{{ item.showPassword ? \'Hide Password\' : \'Show Password\' }}" tooltip-append-to-body="true"></i>\n              </span>\n            </div>\n          </div>\n          <!-- Generate Password -->\n          <div ng-if="item.type == \'password-generate\'" class="col-xs-2 col-sm-3">\n              <button type="button" ng-disabled="isDisabled(item)" class="btn btn-default pull-right" ng-click="generatePassword(item)" ng-if="item.type == \'password-generate\'">Generate</button>\n          </div>\n        </div>\n\n        <!-- Text Area -->\n        <div ng-if="item.type == \'textarea\'">\n        <textarea\n\n          class="form-control"\n          rows = "{{ item.rows }}"\n          minlength="{{ item.minLength }}"\n          maxlength="{{ item.maxLength }}"\n\n          ng-model="ngModel[item.name]"\n          ng-model-options="{ updateOn: item.updateOn, debounce: item.debounce }"\n          ng-focus="focus[item.name] = true; jsonForm[item.name].$setDirty();"\n          ng-blur="focus[item.name] = false"\n\n          ng-required="isRequired(item)"\n          ng-pattern="item.pattern"\n          ng-trim="true"\n\n          ng-pattern="item.pattern"\n          ng-disabled="isDisabled(item)"\n\n          tabindex="{{ $index + 1 }}"\n\n        ></textarea>\n        </div>\n\n        <!-- Checkbox -->\n        <div ng-if="item.type == \'checkbox\'" class="checkbox">\n          <input\n\n            id="checkbox-{{item.name}}"\n            ng-model="ngModel[item.name]"\n            type="checkbox"\n            tabindex="{{ $index + 1 }}"\n            ng-disabled="isDisabled(item)"\n          />\n          <label for="checkbox-{{item.name}}"\n          popover-trigger="mouseenter"\n          popover="{{ item.helpMessage }}"\n          popover-append-to-body="true"\n          popover-placement="right">\n          {{item.label}}\n        </label>\n        </div>\n\n        <!-- Select -->\n        <select\n\n          class="form-control"\n\n          ng-if="item.type == \'select\'"\n          ng-model="ngModel[item.name]"\n          ng-options="key as value for (key, value) in item.options"\n\n          popover-trigger="mouseenter"\n          popover="{{ item.helpMessage }}"\n          popover-append-to-body="true"\n          popover-placement="right"\n\n          ng-required="isRequired(item)"\n          ng-disabled="isDisabled(item)"\n\n          tabindex="{{ $index + 1 }}"\n\n        >\n        </select>\n\n        <!--Radio Buttons-->\n        <div class="radio-container" ng-if="item.type==\'radio\'" ng-repeat="(key, value) in item.options">\n          <div class="radio">\n            <input\n              id="radio-{{key}}"\n              type="radio"\n              name="radio-{{key}}"\n              ng-model="ngModel[item.name]"\n              ng-value="key"\n              ng-required="isRequired(item)"\n              ng-disabled="isDisabled(item)"\n              tabindex="{{ $index + 1 }}">\n            <label for="radio-{{key}}"\n              popover-trigger="mouseenter"\n              popover="{{ item.helpMessage }}"\n              popover-append-to-body="true"\n              popover-placement="right">\n              {{value}}\n            </label>\n          </div><br>\n         </div>\n\n        <!-- Files -->\n        <!-- already has file, we show the name and reset button -->\n        <div class="input-group col-sm-12" ng-if="item.type == \'file\' &&  hasFile(item)">\n          <input type="text" class="form-control input" value="{{ getFileName(item) }}" disabled>\n          <span class="input-group-btn">\n            <button type="button" ng-click="resetFile(item)" class="btn btn-default pull-right" tabindex="{{ $index + 1 }}"><i class="fa fa-times"></i></button>\n          </span>\n        </div>\n        <!-- user hasn\'t selected file yet -->\n        <div class="input-group col-sm-12" ng-if="item.type === \'file\' && !hasFile(item)">\n          <input type="text" class="form-control input" value="{{ item.placeholder }}" disabled>\n          <span class="input-group-btn">\n            <div\n\n              class="btn btn-default pull-right"\n              accept="{{ item.accept }}"\n              type="file"\n              id="file-{{item.name}}"\n\n              ngf-select\n              ng-model="files[item.name]"\n              ngf-change = "onFileSelect(item, $files)"\n\n              ng-required="isRequired(item)"\n              ng-disabled="isDisabled(item)"\n\n              validation-file\n\n              tabindex="{{ $index + 1 }}"\n\n            ><i class="fa fa-upload"></i></div>\n          </span>\n        </div>\n\n        <!-- Invalid input -->\n        <p ng-show="!focus[item.name] && jsonForm[item.name].$dirty && jsonForm[item.name].$invalid && item.errorMessage != null" class="error-message" ng-class="isRequired(item) ? \'text-danger\' : \'text-warning\'">{{ getError(item) }}</p>\n      </div>\n    </div>\n  </ng-form>\n</form>\n')}])}();
+!function(e){try{e=angular.module("json-form.template")}catch(n){e=angular.module("json-form.template",[])}e.run(["$templateCache",function(e){e.put("src/json-form.html",'<!-- Form -->\n<form name="jsonForm" class="jsonForm container-fluid" novalidate>\n\n  <ng-form ng-repeat="item in schema | orderBy:\'order\'" ng-class="getClass(item)" name="{{item.name}}">\n    <div style="display: block" class="form-group row has-feedback" ng-class="{ \'is-centered\': item.type != \'textarea\' && item.type != \'radio\', \'has-success\': item.feedback && !jsonForm[item.name].$pending && jsonForm[item.name].$valid && jsonForm[item.name].$dirty }" ng-show="isVisible(item)">\n      <!-- Label -->\n      <label\n        ng-if="item.type != \'checkbox\'"\n        ng-class="{ \'text-muted\' : isDisabled(item) && !readOnly, \'col-sm-12\': item.type == \'title\', \'col-sm-4\': item.type != \'title\', \'has-options\': item.type == \'password-show\' || item.type == \'password-generate\' }"\n        >\n\n        <!-- Title -->\n        <h4 class="text-muted" ng-if="item.type == \'title\'">{{item.label}}\n          <i  class="fa fa-question-circle text-info"\n              ng-if="!!item.helpMessage"\n              uib-popover="{{ item.helpMessage }}"\n              popover-trigger="mouseenter"\n              popover-placement="right"\n              popover-append-to-body="true">\n          </i>\n        </h4>\n\n        <!-- Field label -->\n        <span ng-if="item.type != \'title\' && item.type != \'checkbox\'" ng-class="{ \'required\' : isRequired(item) }">{{item.label}}</span>\n\n      </label>\n\n      <!-- Field input -->\n      <div class="col-sm-8" ng-if="item.type != \'title\'" ng-class="{ \'col-sm-offset-4\': item.type == \'checkbox\' }">\n\n        <!-- Text, Password and Number -->\n        <div class="row" ng-if="isInput(item)">\n          <div ng-class="{ \'col-xs-10 col-sm-9\': item.type == \'password-generate\', \'col-sm-12\': item.type != \'password-generate\' }">\n            <div class="is-relative">\n              <input\n\n                type="{{ getType(item) }}"\n                class="form-control"\n                placeholder="{{ readOnly ? \'\' : item.placeholder }}"\n\n                uib-popover="{{ item.helpMessage }}"\n                popover-trigger="focus"\n                popover-append-to-body="true"\n\n                validation-url="{{ item.validationUrl }}"\n\n                typeahead="t for t in item.typeahead | filter:$viewValue | limitTo:8"\n\n                ng-model="ngModel[item.name]"\n                ng-model-options="{ updateOn: item.updateOn, debounce: item.debounce }"\n                ng-focus="focus[item.name] = true; jsonForm[item.name].$setDirty();"\n                ng-blur="focus[item.name] = false"\n\n                ng-required="isRequired(item)"\n                minlength="{{ item.minLength }}"\n                maxlength="{{ item.maxLength }}"\n                ng-min="{{ item.min }}"\n                ng-max="{{ item.max }}"\n                ng-pattern="item.pattern"\n                ng-trim="true"\n\n                ng-pattern="item.pattern"\n                ng-disabled="isDisabled(item)"\n\n                tabindex="{{ $index + 1 }}"\n              />\n\n              <!-- Validation feedback -->\n              <span\n                ng-if="item.feedback"\n                ng-show="!jsonForm[item.name].$pending && jsonForm[item.name].$valid && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n                ><i class="fa fa-check"></i>\n              </span>\n              <span\n                ng-if="item.feedback"\n                ng-show="jsonForm[item.name].$pending && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n              ><i class="fa fa-refresh fa-spin"></i></span>\n              <span\n                ng-if="item.feedback"\n                ng-show="!jsonForm[item.name].$pending && jsonForm[item.name].$invalid && jsonForm[item.name].$dirty"\n                class="form-control-feedback text-muted"\n              ><i class="fa fa-times"></i></span>\n\n              <!-- Show Passwords -->\n              <span\n                ng-if="item.type == \'password-show\' || item.type == \'password-generate\'"\n                ng-click="togglePassword(item)"\n                class="form-control-feedback"\n                style="cursor:pointer;  pointer-events: auto;"\n                ng-class=" { \'text-muted\': !item.showPassword }"\n                ><i class="fa fa-eye" tooltip="{{ item.showPassword ? \'Hide Password\' : \'Show Password\' }}" tooltip-append-to-body="true"></i>\n              </span>\n            </div>\n          </div>\n          <!-- Generate Password -->\n          <div ng-if="item.type == \'password-generate\'" class="col-xs-2 col-sm-3">\n              <button type="button" ng-disabled="isDisabled(item)" class="btn btn-default pull-right" ng-click="generatePassword(item)" ng-if="item.type == \'password-generate\'">Generate</button>\n          </div>\n        </div>\n\n        <!-- Text Area -->\n        <div ng-if="item.type == \'textarea\'">\n        <textarea\n\n          class="form-control"\n          rows = "{{ item.rows }}"\n          minlength="{{ item.minLength }}"\n          maxlength="{{ item.maxLength }}"\n\n          ng-model="ngModel[item.name]"\n          ng-model-options="{ updateOn: item.updateOn, debounce: item.debounce }"\n          ng-focus="focus[item.name] = true; jsonForm[item.name].$setDirty();"\n          ng-blur="focus[item.name] = false"\n\n          ng-required="isRequired(item)"\n          ng-pattern="item.pattern"\n          ng-trim="true"\n\n          ng-pattern="item.pattern"\n          ng-disabled="isDisabled(item)"\n\n          tabindex="{{ $index + 1 }}"\n\n        ></textarea>\n        </div>\n\n\n\n        <!-- Select -->\n        <select\n\n          class="form-control"\n\n          ng-if="item.type == \'select\'"\n          ng-model="ngModel[item.name]"\n          ng-options="key as value for (key, value) in item.options"\n\n          popover-trigger="mouseenter"\n          uib-popover="{{ item.helpMessage }}"\n          popover-append-to-body="true"\n\n          ng-required="isRequired(item)"\n          ng-disabled="isDisabled(item)"\n\n          tabindex="{{ $index + 1 }}"\n\n        >\n        </select>\n\n\n\n        <!-- Checkbox -->\n        <div  ng-if="item.type == \'checkbox\'" class="checkbox">\n\n          <input\n\n            id="checkbox-{{item.name}}"\n            ng-model="ngModel[item.name]"\n            type="checkbox"\n            tabindex="{{ $index + 1 }}"\n            ng-disabled="isDisabled(item)"\n          />\n          <label for="checkbox-{{item.name}}"\n          popover-trigger="mouseenter"\n                 uib-popover="{{ item.helpMessage }}"\n          popover-append-to-body="true">\n          {{item.label}}\n        </label>\n        </div>\n\n\n\n        <!-- Checkbox Array\n<div  class="checkbox-container"  ng-if="item.type == \'checkboxs\'" >\n<div class="checkbox" ng-repeat="(key, value) in item.options">\n  <input\n\n    id="checkboxs-{{key}}"\n    ng-model="ngModel[item.name]"\n    type="checkbox"\n    name="checkboxs-{{key}}"\n    ng-true-value = "{{value}}"\n    ng-true-false = ""\n    ng-required="isRequired(item)"\n    ng-disabled="isDisabled(item)"\n    tabindex="{{ $index + 1 }}"\n  />\n  <label for="checkboxs-{{key}}"\n  popover-trigger="mouseenter" uib-popover="{{ item.helpMessage }}"\n  popover-append-to-body="true">\n    {{value}}\n</label>\n</div>\n</div>\n-->\n\n\n\n\n        <!-- Checkbox Array -->\n<div  class="checkbox-container"  ng-if="item.type == \'checkboxs\'" >\n<div class="checkbox" ng-repeat="group in item.groups">\n<input\n\nid="{{group.name}}"\ntype="checkbox"\nvalue = "{{group.name}}"\nng-checked = "ngModel[item.name].indexOf(group.name) > -1" ng-click="toggleSelection(item,group.name)"\ntabindex="{{ $index + 1 }}"\n/>\n<label for="{{group.name}}"\npopover-trigger="mouseenter" uib-popover="{{ item.helpMessage }}"\npopover-append-to-body="true">\n{{group.label}}\n</label>\n</div>\n</div>\n\n\n\n\n\n        <!--Radio Buttons-->\n        <div class="radio-container" ng-if="item.type==\'radio\'" >\n          <div class="radio" ng-repeat="(key, value) in item.options">\n            <input\n              id="radio-{{key}}"\n              type="radio"\n              name="radio-{{key}}"\n              ng-model="ngModel[item.name]"\n              ng-value="key"\n              ng-required="isRequired(item)"\n              ng-disabled="isDisabled(item)"\n              tabindex="{{ $index + 1 }}">\n            <label for="radio-{{key}}"\n              popover-trigger="mouseenter"\n                   uib-popover="{{ item.helpMessage }}"\n              popover-append-to-body="true">\n              {{value}}\n            </label>\n          </div><br>\n         </div>\n\n        <!-- Files -->\n        <!-- already has file, we show the name and reset button -->\n        <div class="input-group col-sm-12" ng-if="item.type == \'file\' &&  hasFile(item)">\n          <input type="text" class="form-control input" value="{{ getFileName(item) }}" disabled>\n          <span class="input-group-btn">\n            <button type="button" ng-click="resetFile(item)" class="btn btn-default pull-right" tabindex="{{ $index + 1 }}"><i class="fa fa-times"></i></button>\n          </span>\n        </div>\n        <!-- user hasn\'t selected file yet -->\n        <div class="input-group col-sm-12" ng-if="item.type === \'file\' && !hasFile(item)">\n          <input type="text" class="form-control input" value="{{ item.placeholder }}" disabled>\n          <span class="input-group-btn">\n            <div\n\n              class="btn btn-default pull-right"\n              accept="{{ item.accept }}"\n              type="file"\n              id="file-{{item.name}}"\n\n              ngf-select\n              ng-model="files[item.name]"\n              ngf-change = "onFileSelect(item, $files)"\n\n              ng-required="isRequired(item)"\n              ng-disabled="isDisabled(item)"\n\n              validation-file\n\n              tabindex="{{ $index + 1 }}"\n\n            ><i class="fa fa-upload"></i></div>\n          </span>\n        </div>\n\n        <!-- Invalid input -->\n        <p ng-show="!focus[item.name] && jsonForm[item.name].$dirty && jsonForm[item.name].$invalid && item.errorMessage != null" class="error-message" ng-class="isRequired(item) ? \'text-danger\' : \'text-warning\'">{{ getError(item) }}</p>\n      </div>\n    </div>\n  </ng-form>\n</form>\n')}])}();
+/**
+ * @author zhiheng.li
+ * @since 2017/2/23
+ * @Description 表单指令
+ */
+
 var module = angular.module('json-form', ['json-form.template']);
 
-/*
-  File Validation directive
+/**
+  文件验证指令
 
-  This directive validates a file input
+  这个指令使用来验证file类型的input
 */
 function validationFile() {
   return {
@@ -21,10 +27,10 @@ function validationFile() {
 // export
 module.directive('validationFile', validationFile);
 
-/*
-  URL Validation directive
-
-  This directive validates an input against an endpoint asynchronously
+/**
+  URL验证指令
+  这个指令是用来验证异步输入框请求使用$asyncValidators;This directive validates an input against an endpoint asynchronously
+  如：注册用户名验证用户名是否存在
 */
 function validationUrl($http, $q) {
   return {
@@ -49,10 +55,9 @@ function validationUrl($http, $q) {
 // export
 module.directive('validationUrl', ['$http', '$q', validationUrl]);
 
-/*
-  JSON Form directive
-
-  This directive generates a bootstrap form from an schema
+/**
+ Json表单指令
+ 这个指令生产一个具于bootstrap表单
 */
 function JSONForm() {
 	return {
@@ -68,46 +73,43 @@ function JSONForm() {
       persistValues: '@?formPersistValues'
 		},
 		link: function(scope, element, attributes, ctrl) {
-      // shortcuts
+      // shortcuts（快捷链）
       var model = scope.ngModel;
 
-      // auxiliars
+      // auxiliars（配套）
       scope.focus = {};
       scope.disabled = {};
       scope.visible = {};
       scope.required = {};
 
-      // read only
+      // read only（只读）
       if (scope.readOnly === 'true')
         scope.readOnly = true;
       else
         scope.readOnly = false;
 
-      // persist values when hiding/disabling a field
+      // persist values when hiding/disabling a field当隐藏/禁用时存留一个字段值
       if (scope.persistValues === 'true')
         scope.persistValues = true;
       else
         scope.persistValues = false;
 
       // checks if a property is undefined or null, and fills it with a default value
+      // 检查如果一个属性是undefined或者为空，取的是默认值
       var defaults = function(item, prop, val){
       	if (item[prop] == null || typeof item[prop] == 'undefined')
       		item[prop] = val;
       }
-
       // initialize all the items
+      // 初始化所有的items
       function initSchema(){
-        scope.schema.forEach(function(item, index) {
+        angular.forEach(scope.schema,function(item, index) {
+          //console.log('label===='+item.label+'name====='+item.name+'==type=='+item.type);
 
-          // Get label from item name if not defined
-          if (typeof item.name == 'undefined' && typeof item.label == 'undefined')
-          {
-            throw "Neither 'name' nor 'label' are defined in one of the items";
-          }
-
+          // 判断name和lable为空时的处理
           if (typeof item.name == 'undefined')
           {
-            item.name = item.label.toLowerCase().split(' ').join('_');
+              throw "name 必须定义不能为空,请检查json配置！";
           }
 
           if (typeof item.label == 'undefined')
@@ -128,7 +130,19 @@ function JSONForm() {
             }
           }
 
-          // fill undefined or null properties with default configuration
+
+
+          if (item.type=='checkboxs'){
+            var array = [];
+            if (item.default){
+              array.push(item.default);
+              scope.ngModel[item.name] = array;
+            } else{
+              scope.ngModel[item.name] = [];
+            }
+          }
+
+          // 填充 undefined 或者 null的属性为默认配置
           defaults (item, 'order', index);
           defaults (item, 'visible', true);
           defaults (item, 'enabled', true);
@@ -136,7 +150,7 @@ function JSONForm() {
           defaults (item, 'pattern', /(.*)$/);
           defaults (item, 'feedback', false);
           defaults (item, 'validationUrl', '');
-          defaults (item, 'placeholder', item.type == 'file' ? 'No file chosen...' : '');
+          defaults (item, 'placeholder', item.type == 'file' ? '没有选择文件...' : '');
           defaults (item, 'minLength', '');
           defaults (item, 'maxLength', '');
           defaults (item, 'min', '');
@@ -152,7 +166,7 @@ function JSONForm() {
           defaults (item, 'debounce', item.validationUrl.length > 0 ? 200 : 0);
           defaults (item, 'updateOn', 'default');
 
-          // fix wrong types
+          // 固定警告类型
           item.default = item.default === "" ? null : item.default;
           item.visible = item.visible === "true" ? true : item.visible === "false" ? false : item.visible;
           item.enabled = item.enabled === "true" ? true : item.enabled === "false" ? false : item.enabled;
@@ -186,27 +200,29 @@ function JSONForm() {
             item.validators = {};
           }
 
-          // fill default values
+          // 填充默认的值
+
           if (typeof scope.ngModel[item.name] == 'undefined' && item.default != null)
           {
+
             scope.ngModel[item.name] = item.default;
           }
         });
       }
-
+      //
       function bindingValue(prop){
-        // aux regex's
+        // 定义正则
         var refRegex = /(.*)\[/;
         var valRegex = /\[(.*)\]$/;
         var negRegex = /^!(.*)$/;
-        // aux negated
+        // 判断标识
         var negated = false;
-        // check if prop is in value[index] notation
+        // 验证prop value(index)
         if (refRegex.test(prop) && valRegex.test(prop)) {
           // extract names
           var reference = refRegex.exec(prop);
           var value = valRegex.exec(prop);
-          // check if valid
+          // 检查有效性
           if (reference.length > 1 && value.length > 1) {
             var refName = reference[1];
             // check if negated
@@ -233,10 +249,26 @@ function JSONForm() {
       function toBoolean(value) {
         return value == true || typeof value == "string" && bindingValue(value)
       }
-
+      // 初始化
       initSchema();
 
-			// Generates a random passoword
+
+      // 复选框checkbox逻辑,checkbox切换对数组添加与删除
+
+     scope.toggleSelection =function(item,groupName) {
+       var idx = scope.ngModel[item.name].indexOf(groupName);
+      // 未选中删除
+       if(idx > -1) {
+         scope.ngModel[item.name].splice(idx,1);
+       } // 选中添加
+       else {
+         scope.ngModel[item.name].push(groupName);
+       }
+     }
+
+
+
+			// 生成一个随机密码
       scope.generatePassword = function(item){
       	for(var password = "", chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         		password.length < 10;
@@ -248,7 +280,7 @@ function JSONForm() {
         item.showPassword = !item.showPassword;
       }
 
-      // Returns whether an item should be disabled or not
+      // 返回是否应禁用item（如：radio配置此选项只能显示一个radio）
       scope.isDisabled = function(item){
 
         if (scope.persistValues !== 'true' && scope.persistValues !== true)
@@ -280,7 +312,7 @@ function JSONForm() {
         return scope.disabled[item.name];
       }
 
-      // Returns whether an item should be visible or not
+      // 返回项是否应该可见
       scope.isVisible = function(item){
 
         if (scope.persistValues !== 'true' && scope.persistValues !== true)
@@ -343,22 +375,22 @@ function JSONForm() {
         return type;
       }
 
-      // Get all the classes for an item
+      // 在一个item里得到所有的class
       scope.getClass = function(item){
 
         if (scope.readOnly)
           return '';
 
-      	// array of classes to apply to this item
+      	// 一个class数组应用于item
       	var classes = [];
 
-      	// default item classes
+      	// 默认item的class
       	if (typeof item.classes == 'string' && item.classes.length > 0)
       	{
       		classes.push(item.classes);
       	}
 
-      	// item has an error
+      	// item发生错误的时候
       	if (scope.jsonForm[item.name].$invalid && scope.jsonForm[item.name].$dirty && !scope.focus[item.name] && item.type != 'file')//!scope.jsonForm[item.name].$valid && !scope.focus[item.name])
       	{
           if (scope.isRequired(item))
@@ -368,7 +400,7 @@ function JSONForm() {
             classes.push('has-warning');
           }
       	}
-
+        // 如果item.name是挂起的状态或者item.name是使用的话
         if (scope.jsonForm[item.name].$pending && scope.jsonForm[item.name].$dirty)
         {
           classes.push('is-pending');
@@ -379,34 +411,35 @@ function JSONForm() {
           classes.push('has-focus');
         }
 
-      	// return all the applicable classes for this item
+        // 返回所有适用的class
       	return classes.join(' ');
       }
 
-      // Get error related to an item
+      // 相关的错误
       scope.getError = function(item) {
 
-      	// there is not predefined error message
+        // 没有预定义的错误信息
       	if (item.errorMessage === null)
       	{
       		return '';
       	}
 
-      	// there's only one error message
+        // 有仅只有一条错误信息
       	if (typeof item.errorMessage == 'string') {
       		return item.errorMessage;
       	}
 
-      	// there are several error messages
+        // 有几条errorMessage
       	if (typeof item.errorMessage == 'object') {
 
-      		// get map of errors
+
+          // 得到map的errors
       		var errors = scope.jsonForm[item.name].$error;
 
-      		// iterate over the errors
+          // 遍历的errors
       		for (var error in errors)
       		{
-      			// if theres a message for one of the errors, return it
+            // 在error里如果有一条errorMessage，则返回
       			if (error in item.errorMessage)
       				return item.errorMessage[error];
       		}
@@ -415,7 +448,8 @@ function JSONForm() {
         return '';
       }
 
-      // make sure flags are boolean
+
+      // 确定条件是boolean
       scope.readOnly = scope.readOnly == "true" || scope.readOnly == true;
       scope.persistValues = scope.persistValues == "true" || scope.persistValues == true;
 
@@ -446,7 +480,7 @@ function JSONForm() {
         return item.placeholder || '';
       }
 
-      // validate form
+      // 验证表单
       var oldSchema = null;
       scope.$watch(function(){
         if (oldSchema !== scope.schema) {
@@ -481,10 +515,9 @@ module.directive('jsonForm', JSONForm);
 
 /*
   JSON Form service
-
-  This service provides a way to use the JSON Form programatically. The service can be injected as a regular dependency and by calling .open() it show the form in a modal.
-*/
-function JSONFormService($modal){
+ 此服务提供了一种以编程方式使用JSON表单的方法。该服务可以作为一个常规的依赖注入，通过调用.open（）它显示在一个模式的形式。
+ */
+function JSONFormService($uibModal){
   return {
     open: function(schema, modalOptions){
 
@@ -505,10 +538,10 @@ function JSONFormService($modal){
         $scope.header = options.text.header || "";
       }];
 
-      return $modal.open(options).result;
+      return $uibModal.open(options).result;
     }
   }
 }
 
 // export
-module.service('jsonForm', ['$modal', JSONFormService]);
+module.service('jsonForm', ['$uibModal', JSONFormService]);

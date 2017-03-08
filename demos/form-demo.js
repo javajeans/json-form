@@ -4,7 +4,7 @@
  * @Description 表单DEMO
  */
 
-angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload','checklist-model']).controller('MainCtrl', ["$scope", "jsonForm","formConfig", function ($scope, jsonForm,formConfig) {
+angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload','checklist-model']).controller('MainCtrl', ["$scope", "jsonForm","formConfig","$filter", function ($scope, jsonForm,formConfig,$filter) {
 
   /**
    * 弹窗Demo
@@ -32,6 +32,9 @@ angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileU
    * @type {[*]}
    */
   $scope.mySchema = formConfig.config();
+
+  var today = $filter('date')(new Date(),'yyyy-MM-dd HH:mm:ss');
+  console.log("today"+today);
   $scope.model = {};
   console.log($scope.model);
   $scope.showModel = function () {

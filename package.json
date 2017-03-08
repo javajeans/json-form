@@ -17,7 +17,7 @@
     "form",
     "dynamic"
   ],
-  "author": "Java Jeans <admin@idinu.com",
+  "author": "Java Jeans <admin@idinu.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/javajeans/json-form/issues"

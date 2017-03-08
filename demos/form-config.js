@@ -3,9 +3,9 @@
  * @since 2017/3/3
  * @Description 配置文件
  */
-angular.module("jsonFormApp").factory('formConfig', function () {
+angular.module("jsonFormApp").factory('formConfig', ['$filter',function ($filter) {
   var factory = {};
-
+  console.log("123412341234"+today1);
   factory.config = function () {
     return [
       {label: "JSON Form", type: "title", name: "title_json_form"},
@@ -261,4 +261,4 @@ angular.module("jsonFormApp").factory('formConfig', function () {
     ];
   }
   return factory;
-})
+}])
