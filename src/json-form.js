@@ -511,3 +511,36 @@ function JSONForm() {
 
 // export
 module.directive('jsonForm', JSONForm);
+
+/*
+  JSON Form service
+ 此服务提供了一种以编程方式使用JSON表单的方法。该服务可以作为一个常规的依赖注入，通过调用.open（）它显示在一个模式的形式。
+ */
+function JSONFormService($uibModal){
+  return {
+    open: function(schema, modalOptions){
+
+      if (typeof schema != 'object')
+        throw 'Invalid schema!';
+
+      var options = modalOptions || {};
+
+      if (!options.text)
+        options.text = {};
+
+      options.template = "<div class=\"modal-header\" ng-if=\"header\"><h2 class=\"modal-title\">{{ header }}</h2></div><div class=\"modal-body\"><json-form ng-model=\"model\" form-schema=\"schema\" form-valid=\"isValid\"></json-form></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" ng-disabled=\"!isValid\" ng-click=\"$close(model)\" tabindex=\"100\">{{ ok }}</button><button class=\"btn btn-default\" ng-click=\"$dismiss()\" tabindex=\"101\">{{ cancel }}</button></div>";
+      options.controller = ['$scope', function($scope) {
+        $scope.schema = schema;
+        $scope.model = {};
+        $scope.ok = options.text.ok || "Ok";
+        $scope.cancel = options.text.cancel || "Cancel";
+        $scope.header = options.text.header || "";
+      }];
+
+      return $uibModal.open(options).result;
+    }
+  }
+}
+
+// export
+module.service('jsonForm', ['$uibModal', JSONFormService]);

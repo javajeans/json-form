@@ -4,7 +4,7 @@
  * @Description 表单DEMO
  */
 
-angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload','checklist-model']).controller('MainCtrl', ["$scope", "jsonForm","formConfig","$filter", function ($scope, jsonForm,formConfig,$filter) {
+angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload']).controller('MainCtrl', ["$scope", "jsonForm","formConfig","$filter", function ($scope, jsonForm,formConfig,$filter) {
 
   /**
    * 弹窗Demo
