@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Title</title>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"></script>
+  <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="../bower_components/angular-animate/angular-animate.min.js"></script>
   <script src="../bower_components/ng-file-upload/ng-file-upload.js" type="text/javascript"
           charset="utf-8"></script>
 
@@ -13,6 +13,7 @@
   <!--<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"-->
           <!--charset="utf-8"></script>-->
   <script src="../src/json-form.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../src/checklist-model.js" type="text/javascript" charset="utf-8"></script>
   <script src="../src/template.js" type="text/javascript" charset="utf-8"></script>
   <link rel="stylesheet/less" type="text/css" href="../src/json-form.less">
   <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
@@ -61,7 +62,20 @@
         <div class="row">
           <div class="col-md-6">
             <div class="">
-            <input type="number" class="form-control" placeholder="" uib-popover="尝试输入一个非数字值" popover-trigger="focus" popover-placement="right" popover-append-to-body="true">
+              <pre>{{radioModel || 'null'}}</pre>
+              <div class="btn-group">
+                <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'男'">男</label>
+                <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'女'">女</label>
+                <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Right'">Right</label>
+              </div>
+              <pre>Model: {{checkModel}}</pre>
+              <pre>Results: {{checkResults}}</pre>
+              <div class="btn-group">
+                <label class="btn btn-primary" ng-model="checkModel.left" uib-btn-checkbox>游泳</label>
+                <label class="btn btn-primary" ng-model="checkModel.middle" uib-btn-checkbox>打球</label>
+                <label class="btn btn-primary" ng-model="checkModel.right" uib-btn-checkbox>跑步</label>
+              </div>
+
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@
  * @Description 表单DEMO
  */
 
-angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload']).controller('MainCtrl', ["$scope", "jsonForm","formConfig", function ($scope, jsonForm,formConfig) {
+angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileUpload','checklist-model']).controller('MainCtrl', ["$scope", "jsonForm","formConfig", function ($scope, jsonForm,formConfig) {
 
   /**
    * 弹窗Demo
@@ -33,6 +33,7 @@ angular.module("jsonFormApp", ['json-form','ngAnimate', 'ui.bootstrap', 'ngFileU
    */
   $scope.mySchema = formConfig.config();
   $scope.model = {};
+  console.log($scope.model);
   $scope.showModel = function () {
     var b = {};
     for (var c in $scope.model)"form" != c && ($scope.model[c] instanceof File ? b[c] = "File <" + $scope.model[c].name + ">" : $scope.model[c] instanceof Date ? b[c] = "Date <" + $scope.model[c].toString() + ">" : b[c] = $scope.model[c]);

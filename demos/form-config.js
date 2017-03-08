@@ -47,6 +47,24 @@ angular.module("jsonFormApp").factory('formConfig', function () {
         helpMessage: "尝试进入一个数量低于10,高于100,非数字值,或把它空白",
         errorMessage: {required: "电子邮箱是必须的", email: "无效的电子邮箱"}
       }, {
+        label: "性别",
+        name: "sex",
+        type: "radio",
+        options:{
+          man: "男",
+          woman: "女"
+        },
+        helpMessage: "默认男的",
+        visible: "form[basic]"
+      },{
+        label: "游泳",
+        name: "interest",
+        type: "checkboxs",
+        helpMessage: "默认乒乓球",
+        groups:[{name:'pingpong',label:"乒乓球"},{name:"swimming",label:"游泳"},{name:"basketball",label:"篮球"}],
+        visible: "form[basic]",
+        "default":"basketball"
+      },{
         label: "订阅通讯",
         name: "subscribe",
         type: "checkbox",

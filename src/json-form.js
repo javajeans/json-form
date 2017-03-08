@@ -72,7 +72,7 @@ function JSONForm() {
       persistValues: '@?formPersistValues'
 		},
 		link: function(scope, element, attributes, ctrl) {
-      // shortcuts（快捷键）
+      // shortcuts（快捷链）
       var model = scope.ngModel;
 
       // auxiliars（配套）
@@ -99,12 +99,11 @@ function JSONForm() {
       	if (item[prop] == null || typeof item[prop] == 'undefined')
       		item[prop] = val;
       }
-      var reg= '/^[A-Za-z]+$/';
       // initialize all the items
       // 初始化所有的items
       function initSchema(){
         angular.forEach(scope.schema,function(item, index) {
-          console.log('label===='+item.label+'name====='+item.name+'==type=='+item.type);
+          //console.log('label===='+item.label+'name====='+item.name+'==type=='+item.type);
 
           // 判断name和lable为空时的处理
           if (typeof item.name == 'undefined')
@@ -130,7 +129,18 @@ function JSONForm() {
             }
           }
 
-          // fill undefined or null properties with default configuration
+
+
+          if (item.type=='checkboxs'){
+            var array = [];
+            if (item.default){
+              array.push(item.default);
+              scope.ngModel[item.name] = array;
+            } else{
+              scope.ngModel[item.name] = [];
+            }
+          }
+
           // 填充 undefined 或者 null的属性为默认配置
           defaults (item, 'order', index);
           defaults (item, 'visible', true);
@@ -155,8 +165,7 @@ function JSONForm() {
           defaults (item, 'debounce', item.validationUrl.length > 0 ? 200 : 0);
           defaults (item, 'updateOn', 'default');
 
-          // fix wrong types
-          // 修复警告类型
+          // 固定警告类型
           item.default = item.default === "" ? null : item.default;
           item.visible = item.visible === "true" ? true : item.visible === "false" ? false : item.visible;
           item.enabled = item.enabled === "true" ? true : item.enabled === "false" ? false : item.enabled;
@@ -190,8 +199,7 @@ function JSONForm() {
             item.validators = {};
           }
 
-          // fill default values
-          //console.log(item.name);
+          // 填充默认的值
 
           if (typeof scope.ngModel[item.name] == 'undefined' && item.default != null)
           {
@@ -202,18 +210,18 @@ function JSONForm() {
       }
       //
       function bindingValue(prop){
-        // aux regex's
+        // 定义正则
         var refRegex = /(.*)\[/;
         var valRegex = /\[(.*)\]$/;
         var negRegex = /^!(.*)$/;
-        // aux negated
+        // 判断标识
         var negated = false;
-        // check if prop is in value[index] notation
+        // 验证prop value(index)
         if (refRegex.test(prop) && valRegex.test(prop)) {
           // extract names
           var reference = refRegex.exec(prop);
           var value = valRegex.exec(prop);
-          // check if valid
+          // 检查有效性
           if (reference.length > 1 && value.length > 1) {
             var refName = reference[1];
             // check if negated
@@ -243,6 +251,22 @@ function JSONForm() {
       // 初始化
       initSchema();
 
+
+      // 复选框checkbox逻辑,checkbox切换对数组添加与删除
+
+     scope.toggleSelection =function(item,groupName) {
+       var idx = scope.ngModel[item.name].indexOf(groupName);
+      // 未选中删除
+       if(idx > -1) {
+         scope.ngModel[item.name].splice(idx,1);
+       } // 选中添加
+       else {
+         scope.ngModel[item.name].push(groupName);
+       }
+     }
+
+
+
 			// 生成一个随机密码
       scope.generatePassword = function(item){
       	for(var password = "", chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -255,7 +279,7 @@ function JSONForm() {
         item.showPassword = !item.showPassword;
       }
 
-      // 返回是否应禁用item
+      // 返回是否应禁用item（如：radio配置此选项只能显示一个radio）
       scope.isDisabled = function(item){
 
         if (scope.persistValues !== 'true' && scope.persistValues !== true)
@@ -386,42 +410,35 @@ function JSONForm() {
           classes.push('has-focus');
         }
 
-      	// return all the applicable classes for this item
         // 返回所有适用的class
       	return classes.join(' ');
       }
 
-      // Get error related to an item
       // 相关的错误
       scope.getError = function(item) {
 
-      	// there is not predefined error message
         // 没有预定义的错误信息
       	if (item.errorMessage === null)
       	{
       		return '';
       	}
 
-      	// there's only one error message
         // 有仅只有一条错误信息
       	if (typeof item.errorMessage == 'string') {
       		return item.errorMessage;
       	}
 
-      	// there are several error messages
-        // 有几条错误信息
+        // 有几条errorMessage
       	if (typeof item.errorMessage == 'object') {
 
-      		// get map of errors
-          // 得到map的错误
+
+          // 得到map的errors
       		var errors = scope.jsonForm[item.name].$error;
 
-      		// iterate over the errors
-          // 遍历的错误
+          // 遍历的errors
       		for (var error in errors)
       		{
-      			// if theres a message for one of the errors, return it
-            // 在错误里如果有一条信息，则返回
+            // 在error里如果有一条errorMessage，则返回
       			if (error in item.errorMessage)
       				return item.errorMessage[error];
       		}
@@ -430,7 +447,7 @@ function JSONForm() {
         return '';
       }
 
-      // make sure flags are boolean
+
       // 确定条件是boolean
       scope.readOnly = scope.readOnly == "true" || scope.readOnly == true;
       scope.persistValues = scope.persistValues == "true" || scope.persistValues == true;
@@ -498,7 +515,6 @@ module.directive('jsonForm', JSONForm);
 /*
   JSON Form service
  此服务提供了一种以编程方式使用JSON表单的方法。该服务可以作为一个常规的依赖注入，通过调用.open（）它显示在一个模式的形式。
-  This service provides a way to use the JSON Form programatically. The service can be injected as a regular dependency and by calling .open() it show the form in a modal.
  */
 function JSONFormService($uibModal){
   return {

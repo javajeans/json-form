@@ -126,23 +126,7 @@
         ></textarea>
         </div>
 
-        <!-- Checkbox -->
-        <div ng-if="item.type == 'checkbox'" class="checkbox">
-          <input
 
-            id="checkbox-{{item.name}}"
-            ng-model="ngModel[item.name]"
-            type="checkbox"
-            tabindex="{{ $index + 1 }}"
-            ng-disabled="isDisabled(item)"
-          />
-          <label for="checkbox-{{item.name}}"
-          popover-trigger="mouseenter"
-                 uib-popover="{{ item.helpMessage }}"
-          popover-append-to-body="true">
-          {{item.label}}
-        </label>
-        </div>
 
         <!-- Select -->
         <select
@@ -165,9 +149,53 @@
         >
         </select>
 
+
+
+        <!-- Checkbox -->
+        <div  ng-if="item.type == 'checkbox'" class="checkbox">
+
+          <input
+
+            id="checkbox-{{item.name}}"
+            ng-model="ngModel[item.name]"
+            type="checkbox"
+            tabindex="{{ $index + 1 }}"
+            ng-disabled="isDisabled(item)"
+          />
+          <label for="checkbox-{{item.name}}"
+          popover-trigger="mouseenter"
+                 uib-popover="{{ item.helpMessage }}"
+          popover-append-to-body="true">
+          {{item.label}}
+        </label>
+        </div>
+
+        <!-- Checkbox groups -->
+<div  class="checkbox-container"  ng-if="item.type == 'checkboxs'" >
+<div class="checkbox" ng-repeat="group in item.groups">
+<input
+
+id="{{group.name}}"
+type="checkbox"
+value = "{{group.name}}"
+ng-checked = "ngModel[item.name].indexOf(group.name) > -1" ng-click="toggleSelection(item,group.name)"
+tabindex="{{ $index + 1 }}"
+/>
+<label for="{{group.name}}"
+popover-trigger="mouseenter" uib-popover="{{ item.helpMessage }}"
+popover-append-to-body="true">
+{{group.label}}
+</label>
+</div>
+</div>
+
+
+
+
+
         <!--Radio Buttons-->
-        <div class="radio-container" ng-if="item.type=='radio'" ng-repeat="(key, value) in item.options">
-          <div class="radio">
+        <div class="radio-container" ng-if="item.type=='radio'" >
+          <div class="radio" ng-repeat="(key, value) in item.options">
             <input
               id="radio-{{key}}"
               type="radio"
