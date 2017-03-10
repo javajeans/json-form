@@ -5,7 +5,6 @@
  */
 angular.module("jsonFormApp").factory('formConfig', ['$filter',function ($filter) {
   var factory = {};
-  console.log("123412341234"+today1);
   factory.config = function () {
     return [
       {label: "JSON Form", type: "title", name: "title_json_form"},

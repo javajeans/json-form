@@ -23,14 +23,13 @@
     "url": "https://github.com/javajeans/json-form/issues"
   },
   "homepage": "https://github.com/javajeans/json-form",
-
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^2.3.1",
-    "gulp-concat": "^2.5.2",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.1.7",
-    "gulp-html2js": "^0.2.0",
+    "gulp-html2js": "^0.4.2",
     "gulp-less": "^3.0.3",
-    "gulp-uglify": "^1.2.0"
+    "gulp-uglify": "^2.1.0"
   }
 }
