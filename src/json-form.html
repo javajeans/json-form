@@ -14,7 +14,7 @@
           <i  class="fa fa-question-circle text-info"
               ng-if="!!item.helpMessage"
               uib-popover="{{ item.helpMessage }}"
-              popover-trigger="mouseenter"
+              popover-trigger="'mouseenter'"
               popover-placement="right"
               popover-append-to-body="true">
           </i>
@@ -39,7 +39,7 @@
                 placeholder="{{ readOnly ? '' : item.placeholder }}"
 
                 uib-popover="{{ item.helpMessage }}"
-                popover-trigger="focus"
+                popover-trigger="'focus'"
                 popover-append-to-body="true"
 
                 validation-url="{{ item.validationUrl }}"
@@ -137,7 +137,7 @@
           ng-model="ngModel[item.name]"
           ng-options="key as value for (key, value) in item.options"
 
-          popover-trigger="mouseenter"
+          popover-trigger="'mouseenter'"
           uib-popover="{{ item.helpMessage }}"
           popover-append-to-body="true"
 
@@ -163,7 +163,7 @@
             ng-disabled="isDisabled(item)"
           />
           <label for="checkbox-{{item.name}}"
-          popover-trigger="mouseenter"
+          popover-trigger="'mouseenter'"
                  uib-popover="{{ item.helpMessage }}"
           popover-append-to-body="true">
           {{item.label}}
@@ -182,7 +182,7 @@ ng-checked = "ngModel[item.name].indexOf(group.name) > -1" ng-click="toggleSelec
 tabindex="{{ $index + 1 }}"
 />
 <label for="{{group.name}}"
-popover-trigger="mouseenter" uib-popover="{{ item.helpMessage }}"
+popover-trigger="'mouseenter'" uib-popover="{{ item.helpMessage }}"
 popover-append-to-body="true">
 {{group.label}}
 </label>
@@ -206,7 +206,7 @@ popover-append-to-body="true">
               ng-disabled="isDisabled(item)"
               tabindex="{{ $index + 1 }}">
             <label for="radio-{{key}}"
-              popover-trigger="mouseenter"
+              popover-trigger="'mouseenter'"
                    uib-popover="{{ item.helpMessage }}"
               popover-append-to-body="true">
               {{value}}

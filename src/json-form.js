@@ -2,6 +2,7 @@
  * @author zhiheng.li
  * @since 2017/2/23
  * @Description 表单指令
+ * 存在bug：helpError需要ui.bootstrap小于2.0.0版本才能使用
  */
 
 var module = angular.module('json-form', ['json-form.template']);
